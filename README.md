@@ -3,10 +3,14 @@ Full DS Lite Support for Server and Client and a few more features! (Webcam & Au
 
 # Orginal Github Repo: https://github.com/quasar/Quasar
 
-## New Features
+## New/Changed Features
  * Remote Webcam
  * Remote Audio
  * DS Lite Support (Full IPv6 & IPv4 Support)
+ * Implemented No-IP Updater
+ * IPv6 visible in the Client-Tree
+ * Fixed DNS resolve of both IPv4 and IPv6 addresses
+ * Several smaller bugfixes
  
 ## Why ?
 I've come across a problem, that if you are on a DS Lite Connection you may won't get any hosts.
