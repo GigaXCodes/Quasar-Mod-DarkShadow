@@ -9,8 +9,11 @@ using Quasar.Common.Messages;
 using Quasar.Common.Utilities;
 using System;
 using System.Diagnostics;
+using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Quasar.Client.Networking
 {
@@ -70,7 +73,26 @@ namespace Quasar.Client.Networking
                 {
                     Host host = _hosts.GetNextHost();
 
-                    base.Connect(host.IpAddress, host.Port);
+                    bool ipv4_addr = string.IsNullOrEmpty(host.IPv4Address.ToString());
+                    bool ipv6_addr = string.IsNullOrEmpty(host.IPv6Address.ToString());
+
+                    if (!ipv4_addr && !ipv6_addr)
+                    {
+                        base.Connect(AddressFamily.InterNetwork, host.IPv4Address, host.Port, false);
+                        base.Connect(AddressFamily.InterNetworkV6, host.IPv6Address, host.Port);
+                    }
+                    else if (!ipv4_addr && ipv6_addr)
+                    {
+                        base.Connect(AddressFamily.InterNetwork, host.IPv4Address, host.Port);
+                    }
+                    else if (ipv4_addr && !ipv6_addr)
+                    {
+                        base.Connect(AddressFamily.InterNetworkV6, host.IPv6Address, host.Port);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Client Fail - Exception Message: IPv4 and IPv6 are empty...");
+                    }
                 }
 
                 while (Connected) // hold client open

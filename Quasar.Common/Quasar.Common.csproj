@@ -19,6 +19,7 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="NAudio" Version="1.10.0" />
     <PackageReference Include="protobuf-net">
       <Version>2.4.6</Version>
     </PackageReference>

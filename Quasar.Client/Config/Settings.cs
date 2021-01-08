@@ -15,7 +15,7 @@ namespace Quasar.Client.Config
     {
 #if DEBUG
         public static string VERSION = Application.ProductVersion;
-        public static string HOSTS = "localhost:4782;";
+        public static string HOSTS = "[::1]:4782;";
         public static int RECONNECTDELAY = 500;
         public static Environment.SpecialFolder SPECIALFOLDER = Environment.SpecialFolder.ApplicationData;
         public static string DIRECTORY = Environment.GetFolderPath(SPECIALFOLDER);
@@ -37,7 +37,7 @@ namespace Quasar.Client.Config
         public static bool HIDEINSTALLSUBDIRECTORY = false;
         public static string INSTALLPATH = "";
         public static string LOGSPATH = "";
-        public static bool UNATTENDEDMODE = true;
+        public static bool UNATTENDEDMODE = false;
 
         public static bool Initialize()
         {

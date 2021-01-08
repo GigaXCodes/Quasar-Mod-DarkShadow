@@ -18,7 +18,15 @@ namespace Quasar.Common.DNS
         /// <remarks>
         /// Can be an IPv4 or IPv6 address.
         /// </remarks>
-        public IPAddress IpAddress { get; set; }
+        public IPAddress IPv4Address { get; set; }
+
+        /// <summary>
+        /// Stores the IP address of host. 
+        /// </summary>
+        /// <remarks>
+        /// Can be an IPv4 or IPv6 address.
+        /// </remarks>
+        public IPAddress IPv6Address { get; set; }
 
         /// <summary>
         /// Stores the port of the Host.

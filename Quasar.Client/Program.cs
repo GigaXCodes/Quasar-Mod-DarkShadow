@@ -31,7 +31,18 @@ namespace Quasar.Client
 
         private static void HandleThreadException(object sender, ThreadExceptionEventArgs e)
         {
-            Debug.WriteLine(e);
+            //Exception ex = (Exception)e.Exception;
+            //string errorLog = "Message: "
+            //    + "\n"
+            //    + ex.Message
+            //    + "Stacktrace:"
+            //    + "\n"
+            //    + ex.StackTrace;
+            
+            //Debug.WriteLine(errorLog);
+            //Console.WriteLine(errorLog);
+
+            //MessageBox.Show(errorLog);
             try
             {
                 string batchFile = BatchFile.CreateRestartBatch(Application.ExecutablePath);
@@ -63,7 +74,18 @@ namespace Quasar.Client
         {
             if (e.IsTerminating)
             {
-                Debug.WriteLine(e);
+                //Exception ex = (Exception) e.ExceptionObject;
+                //string errorLog = "Message: "
+                //    + "\n"
+                //    + ex.Message
+                //    + "Stacktrace:"
+                //    + "\n"
+                //    + ex.StackTrace;
+
+                //Debug.WriteLine(errorLog);
+                //Console.WriteLine(errorLog);
+
+                //MessageBox.Show(errorLog);
                 try
                 {
                     string batchFile = BatchFile.CreateRestartBatch(Application.ExecutablePath);

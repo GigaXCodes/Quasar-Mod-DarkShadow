@@ -8,6 +8,10 @@
     <InputAssemblies Include="$(TargetDir)Gma.System.MouseKeyHook.dll"/>
     <InputAssemblies Include="$(TargetDir)Quasar.Common.dll"/>
     <InputAssemblies Include="$(TargetDir)BouncyCastle.Crypto.dll"/>
+    <InputAssemblies Include="$(TargetDir)AForge.dll"/>
+    <InputAssemblies Include="$(TargetDir)AForge.Video.dll"/>
+    <InputAssemblies Include="$(TargetDir)AForge.Video.DirectShow.dll"/>
+    <InputAssemblies Include="$(TargetDir)NAudio.dll"/>
   </ItemGroup>
 
   <ILRepack
@@ -17,10 +21,10 @@
     TargetKind="SameAsPrimaryAssembly"
     OutputFile="$(TargetPath)"/>
   </Target>
-  <Target Name="CopyWindows" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT' ">
-    <Exec Command='copy "$(TargetPath)" "$(TargetDir)client.bin" /Y' />
-  </Target>
-  <Target Name="CopyUnix" AfterTargets="PostBuildEvent" Condition="'$(OS)' != 'Windows_NT' ">
-    <Exec Command='cp "$(TargetPath)" "$(TargetDir)client.bin"' />
-  </Target>
+    <Target Name="CopyWindows" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT' ">
+	    <Exec Command='copy "$(TargetPath)" "$(TargetDir)client.bin" /Y' />
+    </Target>
+    <Target Name="CopyUnix" AfterTargets="PostBuildEvent" Condition="'$(OS)' != 'Windows_NT' ">
+	    <Exec Command="cp $(TargetPath) $(TargetDir)client.bin" />
+    </Target>
 </Project>

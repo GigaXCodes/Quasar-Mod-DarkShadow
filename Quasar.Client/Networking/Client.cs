@@ -5,6 +5,7 @@ using Quasar.Common.Messages.ReverseProxy;
 using Quasar.Common.Networking;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
@@ -183,11 +184,6 @@ namespace Quasar.Client.Networking
         private List<ReverseProxyClient> _proxyClients = new List<ReverseProxyClient>();
 
         /// <summary>
-        /// The internal index of the message type.
-        /// </summary>
-        private int _typeIndex;
-
-        /// <summary>
         /// Lock object for the list of proxy clients.
         /// </summary>
         private readonly object _proxyClientsLock = new object();
@@ -245,6 +241,11 @@ namespace Quasar.Client.Networking
         private readonly Mutex _singleWriteMutex = new Mutex();
 
         /// <summary>
+        /// Check if the client supports IPv6
+        /// </summary>
+        bool supportsIpV6 = Socket.OSSupportsIPv6;
+
+        /// <summary>
         /// Constructor of the client, initializes serializer types.
         /// </summary>
         /// <param name="serverCertificate">The server certificate.</param>
@@ -258,23 +259,25 @@ namespace Quasar.Client.Networking
         /// <summary>
         /// Attempts to connect to the specified ip address on the specified port.
         /// </summary>
-        /// <param name="ip">The ip address to connect to.</param>
+        /// <param name="addressFamily">Addressfamily IPv4 or IPv6.</param>
+        /// <param name="ipAdress">The IP address to connect to.</param>
         /// <param name="port">The port of the host.</param>
-        protected void Connect(IPAddress ip, ushort port)
+        /// <param name="exception">Throw exception (Default: true)</param>
+        protected void Connect(AddressFamily addressFamily, IPAddress ipAdress, ushort port, bool exception = true)
         {
             Socket handle = null;
             try
             {
                 Disconnect();
 
-                handle = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                handle = new Socket(addressFamily, SocketType.Stream, ProtocolType.Tcp);
                 handle.SetKeepAliveEx(KEEP_ALIVE_INTERVAL, KEEP_ALIVE_TIME);
-                handle.Connect(ip, port);
+                handle.Connect(ipAdress, port);
 
                 if (handle.Connected)
                 {
                     _stream = new SslStream(new NetworkStream(handle, true), false, ValidateServerCertificate);
-                    _stream.AuthenticateAsClient(ip.ToString(), null, SslProtocols.Tls12, false);
+                    _stream.AuthenticateAsClient(ipAdress.ToString(), null, SslProtocols.Tls12, false);
                     _stream.BeginRead(_readBuffer, 0, _readBuffer.Length, AsyncReceive, null);
                     OnClientState(true);
                 }
@@ -285,8 +288,14 @@ namespace Quasar.Client.Networking
             }
             catch (Exception ex)
             {
-                handle?.Dispose();
-                OnClientFail(ex);
+                if (exception)
+                {
+                    handle?.Dispose();
+                    OnClientFail(ex);
+                } else
+                {
+                    Debug.Write(ex.Message);
+                }
             }
         }
 
@@ -368,6 +377,7 @@ namespace Quasar.Client.Networking
             }
             catch (ObjectDisposedException)
             {
+                //empty exception
             }
             catch (Exception ex)
             {
@@ -645,6 +655,7 @@ namespace Quasar.Client.Networking
                         }
                         catch (Exception)
                         {
+                            //empty exception
                         }
                     }
                 }
@@ -685,7 +696,9 @@ namespace Quasar.Client.Networking
                     }
                 }
             }
-            catch { }
+            catch(Exception) {
+                //empty exception
+            }
         }
     }
 }

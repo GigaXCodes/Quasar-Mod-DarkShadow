@@ -1,6 +1,7 @@
 ﻿using Quasar.Common.Cryptography;
 using Quasar.Common.Helpers;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
@@ -102,8 +103,9 @@ namespace Quasar.Client.IO
 
                 return (!string.IsNullOrEmpty(biosIdentifier)) ? biosIdentifier : "N/A";
             }
-            catch
+            catch(Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
             }
 
             return "Unknown";
@@ -127,8 +129,9 @@ namespace Quasar.Client.IO
 
                 return (!string.IsNullOrEmpty(mainboardIdentifier)) ? mainboardIdentifier : "N/A";
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
             }
 
             return "Unknown";
@@ -152,8 +155,9 @@ namespace Quasar.Client.IO
 
                 return (!string.IsNullOrEmpty(cpuName)) ? cpuName : "N/A";
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
             }
 
             return "Unknown";
@@ -178,8 +182,9 @@ namespace Quasar.Client.IO
 
                 return installedRAM;
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
                 return -1;
             }
         }
@@ -202,8 +207,9 @@ namespace Quasar.Client.IO
 
                 return (!string.IsNullOrEmpty(gpuName)) ? gpuName : "N/A";
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
                 return "Unknown";
             }
         }

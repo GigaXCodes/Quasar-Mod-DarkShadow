@@ -1,4 +1,5 @@
 ﻿using Quasar.Client.Helper;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -47,12 +48,17 @@ namespace Quasar.Client.IpGeoLocation
         /// <returns>The retrieved IP geolocation information.</returns>
         public GeoInformation Retrieve()
         {
-            var geo = TryRetrieveOnline() ?? TryRetrieveLocally();
+            //TODO: Switch when or find IPv6 alternative done
+            var geo = TryRetrieveLocally() ?? TryRetrieveOnline();
 
-            if (string.IsNullOrEmpty(geo.IpAddress))
-                geo.IpAddress = TryGetWanIp();
+            if (string.IsNullOrEmpty(geo.IPv4Address))
+                geo.IPv4Address = TryGetWanIp();
 
-            geo.IpAddress = (string.IsNullOrEmpty(geo.IpAddress)) ? "Unknown" : geo.IpAddress;
+            if (string.IsNullOrEmpty(geo.IPv6Address))
+                geo.IPv6Address = TryGetWanIp(true);
+
+            geo.IPv4Address = (string.IsNullOrEmpty(geo.IPv4Address)) ? "Unknown" : geo.IPv4Address;
+            geo.IPv6Address = (string.IsNullOrEmpty(geo.IPv6Address)) ? "Unknown" : geo.IPv6Address;
             geo.Country = (string.IsNullOrEmpty(geo.Country)) ? "Unknown" : geo.Country;
             geo.CountryCode = (string.IsNullOrEmpty(geo.CountryCode)) ? "-" : geo.CountryCode;
             geo.Timezone = (string.IsNullOrEmpty(geo.Timezone)) ? "Unknown" : geo.Timezone;
@@ -84,7 +90,7 @@ namespace Quasar.Client.IpGeoLocation
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://tools.keycdn.com/geo.json");
                 request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0";
                 request.Proxy = null;
-                request.Timeout = 10000;
+                request.Timeout = 15000;
 
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
@@ -94,7 +100,7 @@ namespace Quasar.Client.IpGeoLocation
 
                         GeoInformation g = new GeoInformation
                         {
-                            IpAddress = geoInfo.Data.Geo.Ip,
+                            IPv4Address = geoInfo.Data.Geo.Ip,
                             Country = geoInfo.Data.Geo.CountryName,
                             CountryCode = geoInfo.Data.Geo.CountryCode,
                             Timezone = geoInfo.Data.Geo.Timezone,
@@ -106,7 +112,7 @@ namespace Quasar.Client.IpGeoLocation
                     }
                 }
             }
-            catch
+            catch(Exception)
             {
                 return null;
             }
@@ -132,7 +138,7 @@ namespace Quasar.Client.IpGeoLocation
 
                 return g;
             }
-            catch
+            catch (Exception)
             {
                 return null;
             }
@@ -142,13 +148,16 @@ namespace Quasar.Client.IpGeoLocation
         /// Tries to retrieves the WAN IP.
         /// </summary>
         /// <returns>The WAN IP as string if successful, otherwise <c>null</c>.</returns>
-        private string TryGetWanIp()
+        /// <param name="IPv6">Retrieve public IPv6</param>
+        public string TryGetWanIp(bool IPv6 = false)
         {
             string wanIp = "";
 
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.ipify.org/");
+                string urlExtra = "";
+                if (IPv6) urlExtra = "6";
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api"+ urlExtra + ".ipify.org/");
                 request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0";
                 request.Proxy = null;
                 request.Timeout = 5000;
@@ -164,8 +173,9 @@ namespace Quasar.Client.IpGeoLocation
                     }
                 }
             }
-            catch
+            catch (Exception)
             {
+                //empty exception
             }
 
             return wanIp;
