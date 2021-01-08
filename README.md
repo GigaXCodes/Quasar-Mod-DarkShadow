@@ -1,12 +1,25 @@
-# Quasar
+# Quasar DarkShadow Edition [Modded]
+Full DS Lite Support for Server and Client and a few more features! (Webcam & Audio)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/5857hfy6r1ltb5f2?svg=true)](https://ci.appveyor.com/project/MaxXor/quasar)
-[![Downloads](https://img.shields.io/github/downloads/quasar/Quasar/total.svg)](https://github.com/quasar/Quasar/releases)
-[![License](https://img.shields.io/github/license/quasar/Quasar.svg)](LICENSE)
+# Orginal Github Repo: https://github.com/quasar/Quasar
 
-**Free, Open-Source Remote Administration Tool for Windows**
+## New Features
+ * Remote Webcam
+ * Remote Audio
+ * DS Lite Support (Full IPv6 & IPv4 Support)
+ 
+## Why ?
+I've come across a problem, that if you are on a DS Lite Connection you may won't get any hosts.
+This problem exists because the original Quasar triggers and exception when you only define a IPv6-Address because you are on DS Lite.
 
-Quasar is a fast and light-weight remote administration tool coded in C#. The usage ranges from user support through day-to-day administrative work to employee monitoring. Providing high stability and an easy-to-use user interface, Quasar is the perfect remote administration solution for you.
+Clients that do not support IPv6 will fail to connect, if you are on DS Lite and only define a IPv6-Address.
+
+The clients may take longer to connect, but they will connect.
+
+### IMPORTANT: 
+Make sure your host IPv6 is the primary one assigned by the router, not the temporary address created by windows.
+You can use my version of the DUC No-IP Updater for No-IP Dynamic Hosts: https://github.com/GigaXCodes/NoIP-Updater-IPv6
+Use the option "Get public IPv6 from Adapter" 
 
 ## Screenshots
 
@@ -34,10 +47,6 @@ Quasar is a fast and light-weight remote administration tool coded in C#. The us
 * Reverse Proxy (SOCKS5)
 * Password Recovery (Common Browsers and FTP Clients)
 * ... and many more!
-
-## Download
-* [Latest stable release](https://github.com/quasar/Quasar/releases) (recommended)
-* [Latest development snapshot](https://ci.appveyor.com/project/MaxXor/quasar)
 
 ## Supported runtimes and operating systems
 * .NET Framework 4.5.2 or higher
@@ -73,6 +82,3 @@ See the [wiki](https://github.com/quasar/Quasar/wiki) for usage instructions and
 ## License
 Quasar is distributed under the [MIT License](LICENSE).  
 Third-party licenses are located [here](Licenses).
-
-## Thank you!
-I really appreciate all kinds of feedback and contributions. Thanks for using and supporting Quasar!
