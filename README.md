@@ -26,6 +26,9 @@ You can use my version of the DUC No-IP Updater for No-IP Dynamic Hosts: https:/
 Use the option "Get public IPv6 from Adapter" 
 
 ## Screenshots
+![remote-audio](https://i.imgur.com/8ASW02Y.png)
+
+![remote-webcam](https://i.imgur.com/gfGPIYO.png)
 
 ![remote-shell](Images/remote-shell.png)
 
